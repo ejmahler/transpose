@@ -6,7 +6,7 @@
 
 Utility for transposing multi-dimensional data See the [API Documentation](https://docs.rs/transpose/) for more details.
 
-## Usage
+## Example
 ```rust
 // Create a 2D array in row-major order: the rows of our 2D array are contiguous,
 // and the columns are strided
@@ -22,7 +22,7 @@ let expected_array =  vec![ 1, 4,
 							              2, 5,
 							              3, 6];
 assert_eq!(output_array, expected_array);
-
+```
 ## License
 
 Licensed under either of
