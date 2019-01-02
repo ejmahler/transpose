@@ -11,3 +11,10 @@ repository = "http://github.com/ejmahler/transpose"
 documentation = "http://docs.rs/transpose"
 keywords = ["array", "transpose", "2d"]
 categories = ["algorithms", "data structures"]
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "transpose_benchmarks"
+harness = false
