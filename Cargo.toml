@@ -3,7 +3,7 @@ name = "transpose"
 version = "0.1.0"
 authors = ["Elliott Mahler <join.together@gmail.com>"]
 
-description = "Utility for transposing multi-dimensional data stored as a flat slice"
+description = "Utility for transposing multi-dimensional data"
 
 license = "MIT OR Apache-2.0"
 
