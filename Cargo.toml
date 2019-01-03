@@ -14,3 +14,10 @@ categories = ["algorithms", "data structures"]
 
 [dependencies]
 num-integer = "0.1"
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "transpose_benchmarks"
+harness = false
