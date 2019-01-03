@@ -23,6 +23,12 @@
 //! assert_eq!(final_array, input_array);
 //! ```
 
+extern crate num_integer;
+
+mod strength_reduction;
+mod inplace;
+pub use inplace::transpose_inplace;
+
 const BLOCK_SIZE: usize = 16;
 
 // Transpose a subset of the array, from the input into the output. The idea is that by transposing one block at a time, we can be more cache-friendly
@@ -135,8 +141,8 @@ pub fn transpose<T: Copy>(input: &[T], output: &mut [T], input_width: usize, inp
 mod unit_tests {
     use super::*;
 
-    fn gen_data(width: usize, height: usize) -> Vec<usize> {
-        (0 .. width * height).map(|x| x + 1).collect()
+    pub(crate) fn gen_data(width: usize, height: usize) -> Vec<usize> {
+        (0..width*height).collect()
     }
 
     #[test]

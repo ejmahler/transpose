@@ -12,6 +12,9 @@ documentation = "http://docs.rs/transpose"
 keywords = ["array", "transpose", "2d"]
 categories = ["algorithms", "data structures"]
 
+[dependencies]
+num-integer = "0.1"
+
 [dev-dependencies]
 criterion = "0.2"
 
