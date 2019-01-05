@@ -22,6 +22,11 @@
 //! transpose::transpose(&output_array, &mut final_array, 2, 3);
 //! assert_eq!(final_array, input_array);
 //! ```
+//!
+//! This library supports both in-place and out-of-place transposes. The out-of-place
+//! transpose is much, much faster than the in-place transpose -- the in-place transpose should
+//! only be used in situations where the system doesn't have enough memory to do an out-of-place transpose.
+#![no_std]
 
 extern crate num_integer;
 extern crate strength_reduce;
@@ -30,10 +35,3 @@ mod in_place;
 mod out_of_place;
 pub use in_place::transpose_inplace;
 pub use out_of_place::transpose;
-
-#[cfg(test)]
-mod test_utils {
-    pub(crate) fn gen_data(width: usize, height: usize) -> Vec<usize> {
-        (0..width*height).collect()
-    }
-}

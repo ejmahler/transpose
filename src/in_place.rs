@@ -16,7 +16,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
         let quotient = r / r_new;
 
         r = r - quotient * r_new;
-        std::mem::swap(&mut r, &mut r_new);
+        core::mem::swap(&mut r, &mut r_new);
 
         // t might go negative here, so we have to do a checked subtract
         // if it underflows, wrap it around to the other end of the modulo
@@ -27,7 +27,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
         } else {
             n - (t_subtract - t) % n
         };
-     	std::mem::swap(&mut t, &mut t_new);
+     	core::mem::swap(&mut t, &mut t_new);
     }
 
     t
@@ -68,7 +68,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
 /// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
 pub fn transpose_inplace<T: Copy>(buffer: &mut [T], scratch: &mut [T], width: usize, height: usize) {
 	assert_eq!(width*height, buffer.len());
-	assert_eq!(std::cmp::max(width, height), scratch.len());
+	assert_eq!(core::cmp::max(width, height), scratch.len());
 
 	let gcd = StrengthReducedUsize::new(num_integer::gcd(width, height));
 	let a = StrengthReducedUsize::new(height / gcd);
@@ -134,30 +134,4 @@ pub fn transpose_inplace<T: Copy>(buffer: &mut [T], scratch: &mut [T], width: us
 	        buffer[index_fn(x, y)] = scratch[shuffled_y];
 	    }
 	}
-}
-
-#[cfg(test)]
-mod unit_tests {
-    use super::*;
-    use ::test_utils::gen_data;
-
-    #[test]
-    fn test_transpose_inplace() {
-
-        for width in 1..10 {
-            for height in 1..10 {
-                let input = gen_data(width, height);
-                let mut output = input.clone();
-                let mut scratch = vec![usize::default(); std::cmp::max(width, height)];
-
-                transpose_inplace(&mut output, &mut scratch, width, height);
-
-                for x in 0..width {
-                    for y in 0..height {
-                        assert_eq!(input[x + y * width], output[y + x * height], "x = {}, y = {}", x, y);
-                    }
-                }
-            }
-        }
-    }
 }

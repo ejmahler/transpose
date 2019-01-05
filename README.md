@@ -7,6 +7,8 @@
 
 Utility for transposing multi-dimensional data See the [API Documentation](https://docs.rs/transpose/) for more details.
 
+`transpose` is `#![no_std]`
+
 ## Example
 ```rust
 // Create a 2D array in row-major order: the rows of our 2D array are contiguous,

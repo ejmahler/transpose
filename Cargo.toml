@@ -10,7 +10,7 @@ license = "MIT OR Apache-2.0"
 repository = "http://github.com/ejmahler/transpose"
 documentation = "http://docs.rs/transpose"
 keywords = ["array", "transpose", "2d"]
-categories = ["algorithms", "data structures"]
+categories = ["algorithms", "data structures", "no-std"]
 readme = "README.md"
 
 [dependencies]
