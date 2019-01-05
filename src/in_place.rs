@@ -38,7 +38,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
 /// Given an input array of size input_width * input_height, representing flattened 2D data stored in row-major order,
 /// transpose the rows and columns of that input array, in-place.
 ///
-/// Despite being in-place, this algorithn does require max(width * height) scratch space.
+/// Despite being in-place, this algorithm requires max(width * height) in scratch space.
 ///
 /// ```
 /// // row-major order: the rows of our 2D array are contiguous,

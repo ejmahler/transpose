@@ -1,6 +1,6 @@
 [package]
 name = "transpose"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Elliott Mahler <join.together@gmail.com>"]
 
 description = "Utility for transposing multi-dimensional data"
@@ -11,6 +11,7 @@ repository = "http://github.com/ejmahler/transpose"
 documentation = "http://docs.rs/transpose"
 keywords = ["array", "transpose", "2d"]
 categories = ["algorithms", "data structures"]
+readme = "README.md"
 
 [dependencies]
 num-integer = "0.1"

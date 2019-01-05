@@ -1,8 +1,9 @@
 # transpose
 
-[![](https://img.shields.io/crates/v/transpose.svg)](https://crates.io/crates/transpose)
-[![](https://img.shields.io/crates/l/transpose.svg)](https://crates.io/crates/transpose)
-[![](https://docs.rs/transpose/badge.svg)](https://docs.rs/transpose/)
+[![crate](https://img.shields.io/crates/v/transpose.svg)](https://crates.io/crates/transpose)
+[![license](https://img.shields.io/crates/l/transpose.svg)](https://crates.io/crates/transpose)
+[![documentation](https://docs.rs/transpose/badge.svg)](https://docs.rs/transpose/)
+![minimum rustc 1.26](https://img.shields.io/badge/rustc-1.26+-red.svg)
 
 Utility for transposing multi-dimensional data See the [API Documentation](https://docs.rs/transpose/) for more details.
 
@@ -23,6 +24,11 @@ let expected_array =  vec![ 1, 4,
                             3, 6];
 assert_eq!(output_array, expected_array);
 ```
+
+## Compatibility
+
+The `transpose` crate requires rustc 1.26 or greater.
+
 ## License
 
 Licensed under either of
