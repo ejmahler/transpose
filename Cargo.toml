@@ -14,6 +14,7 @@ categories = ["algorithms", "data structures"]
 
 [dependencies]
 num-integer = "0.1"
+strength_reduce = "^0.2.1"
 
 [dev-dependencies]
 criterion = "0.2"

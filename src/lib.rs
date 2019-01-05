@@ -24,8 +24,8 @@
 //! ```
 
 extern crate num_integer;
+extern crate strength_reduce;
 
-mod strength_reduction;
 mod inplace;
 pub use inplace::transpose_inplace;
 

@@ -1,5 +1,5 @@
 
-use strength_reduction::StrengthReducedUsize;
+use strength_reduce::StrengthReducedUsize;
 use num_integer;
 
 fn multiplicative_inverse(a: usize, n: usize) -> usize {
