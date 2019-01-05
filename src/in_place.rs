@@ -33,10 +33,13 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
     t
 }
 
-/// Transpose the input array into the output array. 
+/// Transpose the input array in-place. 
 ///
 /// Given an input array of size input_width * input_height, representing flattened 2D data stored in row-major order,
 /// transpose the rows and columns of that input array, in-place.
+///
+/// Despite being in-place, this algorithn does require max(width * height) scratch space.
+///
 /// ```
 /// // row-major order: the rows of our 2D array are contiguous,
 /// // and the columns are strided
@@ -136,7 +139,7 @@ pub fn transpose_inplace<T: Copy>(buffer: &mut [T], scratch: &mut [T], width: us
 #[cfg(test)]
 mod unit_tests {
     use super::*;
-    use crate::unit_tests::gen_data;
+    use ::test_utils::gen_data;
 
     #[test]
     fn test_transpose_inplace() {
