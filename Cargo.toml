@@ -14,8 +14,11 @@ categories = ["algorithms", "data structures", "no-std"]
 readme = "README.md"
 
 [dependencies]
-num-integer = "0.1"
 strength_reduce = "^0.2.1"
+
+[dependencies.num-integer]
+version = "0.1"
+default-features = false
 
 [dev-dependencies]
 criterion = "0.2"
