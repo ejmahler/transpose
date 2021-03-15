@@ -2,7 +2,7 @@
 const BLOCK_SIZE: usize = 16;
 const NBR_SEGMENTS: usize = 4;
 
-const SMALL_LEN: usize = 1024;
+const SMALL_LEN: usize = 255;
 const MEDIUM_LEN: usize = 1024*1024;
 
 /// Given an array of size width * height, representing a flattened 2D array,
