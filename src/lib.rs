@@ -26,6 +26,13 @@
 //! This library supports both in-place and out-of-place transposes. The out-of-place
 //! transpose is much, much faster than the in-place transpose -- the in-place transpose should
 //! only be used in situations where the system doesn't have enough memory to do an out-of-place transpose.
+//!
+//! The out-of-place transpose uses one out of three different algorithms depending on the length of the input array.
+//!
+//! - Small: simple iteration over the array. 
+//! - Medium: divide the array into tiles of fixed size, and process each tile separately. 
+//! - Large: recursively split the array into smaller parts until each part is of a good size for the tiling algorithm, and then transpose each part.  
+
 #![no_std]
 
 extern crate num_integer;

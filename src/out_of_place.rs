@@ -1,13 +1,19 @@
-
+// Block size used by the tiling algoritms
 const BLOCK_SIZE: usize = 16;
+// Number of segments used by the segmented block transpose function
 const NBR_SEGMENTS: usize = 4;
+// recursively split data until the number of rows and columns is below this number
+const RECURSIVE_LIMIT: usize = 128;
 
+// Largest size for for using the direct approach
 const SMALL_LEN: usize = 255;
+// Largest size for using the tiled approach
 const MEDIUM_LEN: usize = 1024*1024;
 
+
 /// Given an array of size width * height, representing a flattened 2D array,
-/// transpose the rows and columns of that 2D array into the output
-/// benchmarking shows that loop tiling isn't effective for small arrays (in the range of 50x50 or smaller)
+/// transpose the rows and columns of that 2D array into the output.
+/// Benchmarking shows that loop tiling isn't effective for small arrays.
 unsafe fn transpose_small<T: Copy>(input: &[T], output: &mut [T], width: usize, height: usize) {
     for x in 0..width {
         for y in 0..height {
@@ -35,6 +41,9 @@ unsafe fn transpose_block<T: Copy>(input: &[T], output: &mut [T], width: usize, 
     }
 }
 
+// Transpose a subset of the array, from the input into the output. The idea is that by transposing one block at a time, we can be more cache-friendly
+// SAFETY: Width * height must equal input.len() and output.len(), start_x + block_width must be <= width, start_y + block height must be <= height
+// This function works as `transpose_block`, but also divides the loop into a number of segments. This makes it more cache fiendly for large sizes.
 unsafe fn transpose_block_segmented<T: Copy>(input: &[T], output: &mut [T], width: usize, height: usize, start_x: usize, start_y: usize, block_width: usize, block_height: usize) {
     let height_per_div = block_height/NBR_SEGMENTS;
     for subblock in 0..NBR_SEGMENTS {
@@ -52,35 +61,11 @@ unsafe fn transpose_block_segmented<T: Copy>(input: &[T], output: &mut [T], widt
     }
 }
 
-/// Transpose the input array into the output array. 
-///
-/// Given an input array of size input_width * input_height, representing flattened 2D data stored in row-major order,
-/// transpose the rows and columns of that input array into the output array
-/// ```
-/// // row-major order: the rows of our 2D array are contiguous,
-/// // and the columns are strided
-/// let input_array = vec![ 1, 2, 3,
-/// 						4, 5, 6];
-/// 
-/// // Treat our 6-element array as a 2D 3x2 array, and transpose it to a 2x3 array
-/// let mut output_array = vec![0; 6];
-/// transpose::transpose(&input_array, &mut output_array, 3, 2);
-///
-/// // The rows have become the columns, and the columns have become the rows
-/// let expected_array =  vec![ 1, 4,
-///								2, 5,
-///								3, 6];
-/// assert_eq!(output_array, expected_array);
-///
-/// // If we transpose it again, we should get our original data back.
-/// let mut final_array = vec![0; 6];
-/// transpose::transpose(&output_array, &mut final_array, 2, 3);
-/// assert_eq!(final_array, input_array);
-/// ```
-///
-/// # Panics
-/// 
-/// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
+/// Given an array of size width * height, representing a flattened 2D array,
+/// transpose the rows and columns of that 2D array into the output.
+/// This algorithm divides the input into tiles of size BLOCK_SIZE*BLOCK_SIZE, 
+/// in order to reduce cache misses. This works well for medium sizes, when the
+/// data for each tile fits in the caches.  
 fn transpose_tiled<T: Copy>(input: &[T], output: &mut [T], input_width: usize, input_height: usize) {
 
     let x_block_count = input_width / BLOCK_SIZE;
@@ -92,7 +77,7 @@ fn transpose_tiled<T: Copy>(input: &[T], output: &mut [T], input_width: usize, i
     for y_block in 0..y_block_count {
         for x_block in 0..x_block_count {
             unsafe {
-                transpose_block_segmented(
+                transpose_block(
                     input, output,
                     input_width, input_height,
                     x_block * BLOCK_SIZE, y_block * BLOCK_SIZE,
@@ -141,29 +126,13 @@ fn transpose_tiled<T: Copy>(input: &[T], output: &mut [T], input_width: usize, i
 
 /// Given an array of size width * height, representing a flattened 2D array,
 /// transpose the rows and columns of that 2D array into the output.
-pub fn transpose<T: Copy>(input: &[T], output: &mut [T], input_width: usize, input_height: usize) {
-    assert_eq!(input_width*input_height, input.len());
-    assert_eq!(input_width*input_height, output.len());
-    if input.len() <= SMALL_LEN {
-        unsafe { transpose_small(input, output, input_width, input_height) };
-    }
-    else if input.len() <= MEDIUM_LEN {
-        transpose_tiled(input, output, input_width, input_height);
-    }
-    else {
-        transpose_recursive(input, output, 0, input_height, 0, input_width, input_width, input_height);
-    }
-}
-
-/// Given an array of size width * height, representing a flattened 2D array,
-/// transpose the rows and columns of that 2D array into the output.
 /// This is a recursive algorithm that divides the array into smaller pieces, until they are small enough to
 /// transpose directly without worrying about cache misses.
 /// Once they are small enough, they are transposed using a tiling algorithm. 
 fn transpose_recursive<T: Copy>(input: &[T], output: &mut [T], row_start: usize, row_end: usize, col_start: usize, col_end:  usize, total_columns: usize, total_rows: usize) {
     let nbr_rows = row_end - row_start; 
     let nbr_cols = col_end - col_start;
-    if (nbr_rows <= 128 && nbr_cols <= 128) || nbr_rows<=2 || nbr_cols<=2 {
+    if (nbr_rows <= RECURSIVE_LIMIT && nbr_cols <= RECURSIVE_LIMIT) || nbr_rows<=2 || nbr_cols<=2 {
         let x_block_count = nbr_cols / BLOCK_SIZE;
         let y_block_count = nbr_rows / BLOCK_SIZE;
 
@@ -227,3 +196,48 @@ fn transpose_recursive<T: Copy>(input: &[T], output: &mut [T], row_start: usize,
         transpose_recursive(input, output, row_start, row_end, col_start + (nbr_cols / 2), col_end, total_columns, total_rows);
     }
 }
+
+
+/// Transpose the input array into the output array. 
+///
+/// Given an input array of size input_width * input_height, representing flattened 2D data stored in row-major order,
+/// transpose the rows and columns of that input array into the output array
+/// ```
+/// // row-major order: the rows of our 2D array are contiguous,
+/// // and the columns are strided
+/// let input_array = vec![ 1, 2, 3,
+/// 						4, 5, 6];
+/// 
+/// // Treat our 6-element array as a 2D 3x2 array, and transpose it to a 2x3 array
+/// let mut output_array = vec![0; 6];
+/// transpose::transpose(&input_array, &mut output_array, 3, 2);
+///
+/// // The rows have become the columns, and the columns have become the rows
+/// let expected_array =  vec![ 1, 4,
+///								2, 5,
+///								3, 6];
+/// assert_eq!(output_array, expected_array);
+///
+/// // If we transpose it again, we should get our original data back.
+/// let mut final_array = vec![0; 6];
+/// transpose::transpose(&output_array, &mut final_array, 2, 3);
+/// assert_eq!(final_array, input_array);
+/// ```
+///
+/// # Panics
+/// 
+/// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
+pub fn transpose<T: Copy>(input: &[T], output: &mut [T], input_width: usize, input_height: usize) {
+    assert_eq!(input_width*input_height, input.len());
+    assert_eq!(input_width*input_height, output.len());
+    if input.len() <= SMALL_LEN {
+        unsafe { transpose_small(input, output, input_width, input_height) };
+    }
+    else if input.len() <= MEDIUM_LEN {
+        transpose_tiled(input, output, input_width, input_height);
+    }
+    else {
+        transpose_recursive(input, output, 0, input_height, 0, input_width, input_width, input_height);
+    }
+}
+
