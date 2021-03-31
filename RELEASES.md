@@ -1,3 +1,9 @@
+# Release 0.2.1 (2020-03-30)
+
+## Improvements
+
+ - Significantly improved the performance of the out-of-place transpose
+
 # Release 0.2.0 (2019-01-04)
 
 ## Features
