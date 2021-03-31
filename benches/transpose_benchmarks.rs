@@ -8,7 +8,7 @@ use std::mem;
 use std::time::Duration;
 
 fn bench_oop_transpose<T: Copy + Default>(c: &mut Criterion, tyname: &str) {
-    let ref sizes = [(4, 4), (8, 8), (16, 16), (64, 64), (256, 256), (1024, 1024)];
+    let ref sizes = [(4, 4), (8, 8), (16, 16), (64, 64), (256, 256), (1024, 1024), (2048, 2048), (4096, 4096)];
 
     let bench = ParameterizedBenchmark::new(tyname,
         |b, &&(width, height)| {
