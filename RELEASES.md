@@ -3,6 +3,7 @@
 ## Improvements
 
  - Significantly improved the performance of the out-of-place transpose
+ - Removed depenendence on `std` in the `num_integer` dependency.
 
 # Release 0.2.0 (2019-01-04)
 
