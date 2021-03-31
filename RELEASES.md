@@ -17,9 +17,4 @@
 
 # Release 0.1.0 (2019-01-01)
 
- - Initial release. Support for computing strength-reduced division and modulo for unsigned integers:
- - `u8`: `StrengthReducedU8`
- - `u16`: `StrengthReducedU16`
- - `u32`: `StrengthReducedU32`
- - `u64`: `StrengthReducedU64`
- - `usize`: `StrengthReducedUsize`
+ - Initial release. Support for an out-of-place transpose.
