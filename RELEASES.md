@@ -1,3 +1,10 @@
+# Release 0.2.2 (2022-11-07)
+
+## Fixes
+
+ - Added missing license files
+ - Upgraded `criterion` dependency from 0.2 to 0.3
+
 # Release 0.2.1 (2020-03-30)
 
 ## Improvements
