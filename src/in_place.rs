@@ -33,12 +33,12 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
     t
 }
 
-/// Transpose the input array in-place. 
+/// Transpose the input array in-place.
 ///
 /// Given an input array of size input_width * input_height, representing flattened 2D data stored in row-major order,
 /// transpose the rows and columns of that input array, in-place.
 ///
-/// Despite being in-place, this algorithm requires max(width * height) in scratch space.
+/// Despite being in-place, this algorithm requires max(width, height) in scratch space.
 ///
 /// ```
 /// // row-major order: the rows of our 2D array are contiguous,
@@ -46,7 +46,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
 /// let original_array = vec![ 1, 2, 3,
 /// 						   4, 5, 6];
 /// let mut input_array = original_array.clone();
-/// 
+///
 /// // Treat our 6-element array as a 2D 3x2 array, and transpose it to a 2x3 array
 /// // transpose_inplace requires max(width, height) scratch space, which is in this case 3
 /// let mut scratch = vec![0; 3];
@@ -64,8 +64,8 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
 /// ```
 ///
 /// # Panics
-/// 
-/// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
+///
+/// Panics if `input.len() != input_width * input_height` or if `scratch.len() != max(width, height)`
 pub fn transpose_inplace<T: Copy>(buffer: &mut [T], scratch: &mut [T], width: usize, height: usize) {
 	assert_eq!(width*height, buffer.len());
 	assert_eq!(core::cmp::max(width, height), scratch.len());
