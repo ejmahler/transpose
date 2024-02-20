@@ -1,3 +1,10 @@
+# Release 0.2.3 (2024-02-19)
+
+## Fixes
+
+ - Fixed an integer overflow that could lead to the out-of-place transpose function accepting invalid and unsafe inputs (#11)
+ - Documentation corrections (#7)
+
 # Release 0.2.2 (2022-11-07)
 
 ## Fixes
