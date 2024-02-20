@@ -7,8 +7,8 @@ description = "Utility for transposing multi-dimensional data"
 
 license = "MIT OR Apache-2.0"
 
-repository = "http://github.com/ejmahler/transpose"
-documentation = "http://docs.rs/transpose"
+repository = "https://github.com/ejmahler/transpose"
+documentation = "https://docs.rs/transpose"
 keywords = ["array", "transpose", "2d"]
 categories = ["algorithms", "data structures", "no-std"]
 readme = "README.md"
