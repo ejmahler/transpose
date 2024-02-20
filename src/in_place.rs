@@ -67,7 +67,7 @@ fn multiplicative_inverse(a: usize, n: usize) -> usize {
 /// 
 /// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
 pub fn transpose_inplace<T: Copy>(buffer: &mut [T], scratch: &mut [T], width: usize, height: usize) {
-	assert_eq!(width*height, buffer.len());
+	assert_eq!(width.checked_mul(height), Some(buffer.len()));
 	assert_eq!(core::cmp::max(width, height), scratch.len());
 
 	let gcd = StrengthReducedUsize::new(num_integer::gcd(width, height));

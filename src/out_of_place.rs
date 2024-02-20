@@ -228,8 +228,8 @@ fn transpose_recursive<T: Copy>(input: &[T], output: &mut [T], row_start: usize,
 /// 
 /// Panics if `input.len() != input_width * input_height` or if `output.len() != input_width * input_height`
 pub fn transpose<T: Copy>(input: &[T], output: &mut [T], input_width: usize, input_height: usize) {
-    assert_eq!(input_width*input_height, input.len());
-    assert_eq!(input_width*input_height, output.len());
+    assert_eq!(input_width.checked_mul(input_height), Some(input.len()));
+    assert_eq!(input.len(), output.len());
     if input.len() <= SMALL_LEN {
         unsafe { transpose_small(input, output, input_width, input_height) };
     }
